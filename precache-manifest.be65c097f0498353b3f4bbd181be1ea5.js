@@ -1,18 +1,18 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "70e70a83f4bb7dc384e2607a8e88c5fd",
+    "revision": "a86561d4fa858080539bc1dddac11580",
     "url": "/neko-splash/index.html"
   },
   {
-    "revision": "bd54c13644f6b099517b",
-    "url": "/neko-splash/static/css/main.4dc53534.chunk.css"
+    "revision": "bce7bfed4c3cf5afb100",
+    "url": "/neko-splash/static/css/main.726c1da6.chunk.css"
   },
   {
     "revision": "c8ee3a1f2a6bc836f740",
     "url": "/neko-splash/static/js/2.ecc5ac8f.chunk.js"
   },
   {
-    "revision": "bd54c13644f6b099517b",
+    "revision": "bce7bfed4c3cf5afb100",
     "url": "/neko-splash/static/js/main.27b70ca7.chunk.js"
   },
   {

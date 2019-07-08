@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/neko-splash/static/css/main.4dc53534.chunk.css",
+    "main.css": "/neko-splash/static/css/main.726c1da6.chunk.css",
     "main.js": "/neko-splash/static/js/main.27b70ca7.chunk.js",
     "main.js.map": "/neko-splash/static/js/main.27b70ca7.chunk.js.map",
     "runtime~main.js": "/neko-splash/static/js/runtime~main.343db7a6.js",
@@ -8,8 +8,8 @@
     "static/js/2.ecc5ac8f.chunk.js": "/neko-splash/static/js/2.ecc5ac8f.chunk.js",
     "static/js/2.ecc5ac8f.chunk.js.map": "/neko-splash/static/js/2.ecc5ac8f.chunk.js.map",
     "index.html": "/neko-splash/index.html",
-    "precache-manifest.931e863ac977ecd982a9c14493800266.js": "/neko-splash/precache-manifest.931e863ac977ecd982a9c14493800266.js",
+    "precache-manifest.be65c097f0498353b3f4bbd181be1ea5.js": "/neko-splash/precache-manifest.be65c097f0498353b3f4bbd181be1ea5.js",
     "service-worker.js": "/neko-splash/service-worker.js",
-    "static/css/main.4dc53534.chunk.css.map": "/neko-splash/static/css/main.4dc53534.chunk.css.map"
+    "static/css/main.726c1da6.chunk.css.map": "/neko-splash/static/css/main.726c1da6.chunk.css.map"
   }
 }
