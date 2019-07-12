@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.scss';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
-import { Route, Link, HashRouter as Router, Switch } from 'react-router-dom';
+import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom';
 import NekoPage from './components/neko-page/neko-page';
 
 const theme = createMuiTheme({
