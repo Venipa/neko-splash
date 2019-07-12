@@ -25,11 +25,14 @@ export default class NekoDisplayImage extends React.Component<
           </Box>
         )}
         <Container maxWidth="md" style={{position: 'relative'}}>
+        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
         <img
           src={neko.url}
           className="neko-display-image"
+          alt="Cool Neko Image"
           onLoad={ev => this.props.onLoad && this.props.onLoad()}
         />
+        </Box>
         </Container>
       </Box>
     );

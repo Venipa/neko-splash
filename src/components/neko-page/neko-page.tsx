@@ -161,8 +161,57 @@ export default class NekoPage extends React.Component<
                     <DownloadIcon />
                   </IconButton>
                 )}
-                {currentNekoRoute && (
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+        <AppBar
+          position="static"
+          color="primary"
+          className="sub-bar"
+          elevation={4}
+        >
+          <Container maxWidth="md">
+            <Toolbar style={{ minHeight: 42 }}>
+              <Box
+                display="flex"
+                flex="1"
+                flexDirection="row"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Box flex="1" />
+                {currentNeko &&
+                  loadedNekoModules.filter(x => x.isNsfw).length > 0 && (
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          title="NSFW"
+                          color="secondary"
+                          checked={nsfwEnabled}
+                          onChange={async () =>
+                            this.setState(
+                              {
+                                nsfwEnabled: !nsfwEnabled
+                              },
+                              () => {
+                                localStorage.setItem(
+                                  'nsfwEnabled',
+                                  JSON.stringify(!nsfwEnabled)
+                                );
+                              }
+                            )
+                          }
+                        />
+                      }
+                      label="NSFW"
+                      labelPlacement="end"
+                    />
+                  )}
+                  {currentNekoRoute && (
                   <Select
+                    className="app-sub-select"
+                    color="secondary"
                     value={currentNekoRoute.name}
                     onChange={async prop => {
                       const r = loadedNekoModules.find(
@@ -194,53 +243,6 @@ export default class NekoPage extends React.Component<
                       ))}
                   </Select>
                 )}
-              </Box>
-            </Toolbar>
-          </Container>
-        </AppBar>
-        <AppBar
-          position="static"
-          color="primary"
-          className="sub-bar"
-          elevation={4}
-        >
-          <Container maxWidth="md">
-            <Toolbar style={{ minHeight: 40 }}>
-              <Box
-                display="flex"
-                flex="1"
-                flexDirection="row"
-                justifyContent="flex-start"
-                alignItems="center"
-              >
-                <Box flex="1" />
-                {currentNeko &&
-                  loadedNekoModules.filter(x => x.isNsfw).length > 0 && (
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          title="NSFW"
-                          color="primary"
-                          checked={nsfwEnabled}
-                          onChange={async () =>
-                            this.setState(
-                              {
-                                nsfwEnabled: !nsfwEnabled
-                              },
-                              () => {
-                                localStorage.setItem(
-                                  'nsfwEnabled',
-                                  JSON.stringify(!nsfwEnabled)
-                                );
-                              }
-                            )
-                          }
-                        />
-                      }
-                      label="NSFW"
-                      labelPlacement="end"
-                    />
-                  )}
               </Box>
             </Toolbar>
           </Container>
