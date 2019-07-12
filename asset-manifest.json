@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/neko-splash/static/css/main.fc4d8b52.chunk.css",
-    "main.js": "/neko-splash/static/js/main.9bdc6605.chunk.js",
-    "main.js.map": "/neko-splash/static/js/main.9bdc6605.chunk.js.map",
+    "main.css": "/neko-splash/static/css/main.21433e5f.chunk.css",
+    "main.js": "/neko-splash/static/js/main.8f46689c.chunk.js",
+    "main.js.map": "/neko-splash/static/js/main.8f46689c.chunk.js.map",
     "runtime~main.js": "/neko-splash/static/js/runtime~main.6cb16372.js",
     "runtime~main.js.map": "/neko-splash/static/js/runtime~main.6cb16372.js.map",
-    "static/js/2.a667ff77.chunk.js": "/neko-splash/static/js/2.a667ff77.chunk.js",
-    "static/js/2.a667ff77.chunk.js.map": "/neko-splash/static/js/2.a667ff77.chunk.js.map",
+    "static/js/2.3993d04d.chunk.js": "/neko-splash/static/js/2.3993d04d.chunk.js",
+    "static/js/2.3993d04d.chunk.js.map": "/neko-splash/static/js/2.3993d04d.chunk.js.map",
     "static/js/3.3fe23f4f.chunk.js": "/neko-splash/static/js/3.3fe23f4f.chunk.js",
     "static/js/3.3fe23f4f.chunk.js.map": "/neko-splash/static/js/3.3fe23f4f.chunk.js.map",
     "index.html": "/neko-splash/index.html",
-    "precache-manifest.54ba51788a581b6ad4012f1e8c56493b.js": "/neko-splash/precache-manifest.54ba51788a581b6ad4012f1e8c56493b.js",
+    "precache-manifest.17809f2498f4d1154bd265bd76a1b649.js": "/neko-splash/precache-manifest.17809f2498f4d1154bd265bd76a1b649.js",
     "service-worker.js": "/neko-splash/service-worker.js",
-    "static/css/main.fc4d8b52.chunk.css.map": "/neko-splash/static/css/main.fc4d8b52.chunk.css.map"
+    "static/css/main.21433e5f.chunk.css.map": "/neko-splash/static/css/main.21433e5f.chunk.css.map"
   }
 }
