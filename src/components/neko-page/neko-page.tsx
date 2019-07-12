@@ -53,7 +53,9 @@ export default class NekoPage extends React.Component<
     super(props);
     this.state = {
       nekoLoading: true,
-      nsfwEnabled: !!localStorage.getItem('nsfwEnabled') && !!JSON.parse(localStorage.getItem('nsfwEnabled')!),
+      nsfwEnabled:
+        !!localStorage.getItem('nsfwEnabled') &&
+        !!JSON.parse(localStorage.getItem('nsfwEnabled')!),
       loadedNekoModules: []
     };
     this.client = api.instance();
@@ -98,7 +100,6 @@ export default class NekoPage extends React.Component<
             })
           )
           .subscribe(x => {
-            console.log('sub change', x.body);
             this.setState({
               currentNeko: x.body
             });
@@ -114,10 +115,9 @@ export default class NekoPage extends React.Component<
       loadedNekoModules,
       nsfwEnabled
     } = this.state;
-    console.log(currentNekoRoute, currentNeko, nsfwEnabled);
     return (
       <Box flexDirection="column" display="flex">
-        <AppBar position="static"  elevation={0}>
+        <AppBar position="static" elevation={0}>
           <Container maxWidth="md">
             <Toolbar>
               <Box
@@ -143,22 +143,24 @@ export default class NekoPage extends React.Component<
                 >
                   <RefreshIcon />
                 </IconButton>
-                <IconButton
-                  target="_blank"
-                  style={{ marginRight: 8 }}
-                  href={currentNeko ? currentNeko.url : '#'}
-                  disabled={!currentNeko}
-                  download={
-                    currentNeko
-                      ? currentNeko.url.substring(
-                          currentNeko.url.lastIndexOf('/') + 1
-                        )
-                      : '#'
-                  }
-                  onClick={() => {}}
-                >
-                  <DownloadIcon />
-                </IconButton>
+                {currentNeko && (
+                  <IconButton
+                    target="_blank"
+                    style={{ marginRight: 8 }}
+                    href={currentNeko ? currentNeko.url : '#'}
+                    disabled={!currentNeko}
+                    download={
+                      currentNeko
+                        ? currentNeko.url.substring(
+                            currentNeko.url.lastIndexOf('/') + 1
+                          )
+                        : '#'
+                    }
+                    onClick={() => {}}
+                  >
+                    <DownloadIcon />
+                  </IconButton>
+                )}
                 {currentNekoRoute && (
                   <Select
                     value={currentNekoRoute.name}
@@ -196,9 +198,14 @@ export default class NekoPage extends React.Component<
             </Toolbar>
           </Container>
         </AppBar>
-        <AppBar position="static" color="primary" className="sub-bar" elevation={4}>
+        <AppBar
+          position="static"
+          color="primary"
+          className="sub-bar"
+          elevation={4}
+        >
           <Container maxWidth="md">
-            <Toolbar style={{minHeight: 40}}>
+            <Toolbar style={{ minHeight: 40 }}>
               <Box
                 display="flex"
                 flex="1"
@@ -216,12 +223,17 @@ export default class NekoPage extends React.Component<
                           color="primary"
                           checked={nsfwEnabled}
                           onChange={async () =>
-                            this.setState({
-                              nsfwEnabled: !nsfwEnabled
-                            }, () => {
-                              localStorage.setItem('nsfwEnabled', JSON.stringify(!nsfwEnabled));
-                            })
-
+                            this.setState(
+                              {
+                                nsfwEnabled: !nsfwEnabled
+                              },
+                              () => {
+                                localStorage.setItem(
+                                  'nsfwEnabled',
+                                  JSON.stringify(!nsfwEnabled)
+                                );
+                              }
+                            )
                           }
                         />
                       }
