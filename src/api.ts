@@ -1,8 +1,9 @@
 import { RxHR } from '@akanass/rx-http-request';
-import { INekoImage, INekoRoute } from './models/neko-image';
+import { INekoImage, INekoRoute, NekoImageMd } from './models/neko-image';
+const baseAPIUrl = 'https://nekos.life/api/v2';
 
 const defaultClient = RxHR.defaults({
-  baseUrl: 'https://nekos.life/api/v2',
+  baseUrl: baseAPIUrl,
   json: true
 });
 
@@ -21,10 +22,13 @@ export default {
     meow: () => defaultClient.get<INekoImage>('img/meow'),
     fox: () => defaultClient.get<INekoImage>('img/fox_girl')
   },
-  getImageMds: () => {
-    const importAll = (r: any) => r.keys().map(r);
-    return importAll(require.context('./neko/images/', false, /\.image\.\.md$/))
-      .sort()
-      .reverse();
-  }
+  getImageMds: async (): Promise<NekoImageMd[]> => (await import("./neko/images.env.json")).default.map((x: any) => {
+    if (!x.apiBase) {
+      x.apiBase = baseAPIUrl;
+    }
+    if (!x.path) {
+      x.path = `img/${x.name}`;
+    }
+    return x;
+  })
 };

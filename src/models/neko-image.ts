@@ -13,7 +13,7 @@ export interface INekoRoute {
 export interface NekoImageMd {
     displayName: string;
     name: string;
-    description: string;
+    description?: string;
     isNsfw: boolean;
     apiBase?: string;
     path?: string;

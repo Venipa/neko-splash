@@ -8,26 +8,30 @@ import {
   Button,
   IconButton,
   Select,
-  MenuItem
+  MenuItem,
+  Badge,
+  Switch,
+  FormControlLabel
 } from '@material-ui/core';
 import { config } from '../..';
-import NekoDisplayImage from './neko-display-image';
+import NekoDisplayImage, { INekoDisplayImageProps } from './neko-display-image';
 import NekoIcon from '@material-ui/icons/SdCardRounded';
 import RefreshIcon from '@material-ui/icons/RefreshRounded';
 import DownloadIcon from '@material-ui/icons/CloudDownloadRounded';
 import GitHubIcon from './../../github-icon.svg';
 import api from '../../api';
 import { RxHttpRequest } from '@akanass/rx-http-request';
-import { Subject, combineLatest, BehaviorSubject } from 'rxjs';
+import { Subject, combineLatest, BehaviorSubject, Subscription } from 'rxjs';
 import {
   debounceTime,
   switchMap,
   startWith,
   finalize,
   distinctUntilChanged,
-  tap
+  tap,
+  filter
 } from 'rxjs/operators';
-import { INekoImage, INekoRoute } from '../../models/neko-image';
+import { INekoImage, INekoRoute, NekoImageMd } from '../../models/neko-image';
 import './neko-page.scss';
 import { NekRoutes } from '../../api-routes';
 
@@ -36,8 +40,9 @@ export interface INekoPageState {
   currentNeko?: INekoImage;
   nekoLoading: boolean;
   downloading?: boolean;
-  nekoRoutes: INekoRoute[];
-  currentNekoRoute: INekoRoute;
+  currentNekoRoute?: NekoImageMd;
+  loadedNekoModules: NekoImageMd[];
+  nsfwEnabled?: boolean;
 }
 export default class NekoPage extends React.Component<
   INekoPageProps,
@@ -48,36 +53,71 @@ export default class NekoPage extends React.Component<
     super(props);
     this.state = {
       nekoLoading: true,
-      nekoRoutes: NekRoutes,
-      currentNekoRoute: NekRoutes[0]
+      nsfwEnabled: !!localStorage.getItem('nsfwEnabled') && !!JSON.parse(localStorage.getItem('nsfwEnabled')!),
+      loadedNekoModules: []
     };
     this.client = api.instance();
   }
   private onRefresh = new Subject<void>();
   private onRefresh$ = this.onRefresh.asObservable().pipe(debounceTime(500));
-  private currentRoute = new BehaviorSubject<INekoRoute>(NekRoutes[0]);
-  private currentRoute$ = this.currentRoute
-    .asObservable()
-    .pipe(distinctUntilChanged());
-  async componentDidMount() {
-    combineLatest(
-      this.onRefresh$.pipe(startWith(void 0)),
-      this.currentRoute$.pipe(startWith(NekRoutes[0]))
-    )
-      .pipe(switchMap(() => this.currentRoute.getValue().request()))
-      .subscribe(x => {
-        console.log(x);
-        this.setState({
-          currentNeko: x.body
-        });
+  private currentRoute = new BehaviorSubject<NekoImageMd>(null as any);
+  private currentRoute$ = this.currentRoute.asObservable().pipe(
+    filter(x => !!x),
+    distinctUntilChanged(),
+    tap(x => {
+      this.setState({
+        currentNekoRoute: x
       });
+    })
+  );
+  async componentDidMount() {
+    let sub: Subscription;
+    const rts = await api.getImageMds();
+    const defaultNeko = rts.find(x => x.name === 'neko')!;
+    this.setState(
+      {
+        loadedNekoModules: rts.sort((l, r) => (l.isNsfw ? 1 : -1)),
+        currentNekoRoute: defaultNeko
+      },
+      () => {
+        if (sub && !sub.closed) {
+          sub.unsubscribe();
+        }
+        sub = combineLatest(
+          this.onRefresh$.pipe(startWith(void 0)),
+          this.currentRoute$.pipe(startWith(defaultNeko))
+        )
+          .pipe(
+            switchMap(([l, r]) => {
+              const path = r.path!;
+              const baseUri = r.apiBase!;
+              const apiInstance = api.instance();
+              return apiInstance.get(path, {
+                baseUrl: baseUri
+              });
+            })
+          )
+          .subscribe(x => {
+            console.log('sub change', x.body);
+            this.setState({
+              currentNeko: x.body
+            });
+          });
+      }
+    );
   }
 
   public render() {
-    const { currentNeko } = this.state;
+    const {
+      currentNeko,
+      currentNekoRoute,
+      loadedNekoModules,
+      nsfwEnabled
+    } = this.state;
+    console.log(currentNekoRoute, currentNeko, nsfwEnabled);
     return (
       <Box flexDirection="column" display="flex">
-        <AppBar position="static">
+        <AppBar position="static"  elevation={0}>
           <Container maxWidth="md">
             <Toolbar>
               <Box
@@ -119,41 +159,76 @@ export default class NekoPage extends React.Component<
                 >
                   <DownloadIcon />
                 </IconButton>
-                <Select
-                  value={this.state.currentNekoRoute.name}
-                  onChange={async prop => {
-                    const r = this.state.nekoRoutes.find(
-                      x => x.name === prop.target.value
-                    );
-                    if (r) {
-                      this.setState(
-                        {
-                          currentNekoRoute: r
-                        },
-                        () => {
-                          this.setState(
-                            {
-                              nekoLoading: true
-                            },
-                            () => {
-                              this.currentRoute.next(r);
-                            }
-                          );
-                        }
+                {currentNekoRoute && (
+                  <Select
+                    value={currentNekoRoute.name}
+                    onChange={async prop => {
+                      const r = loadedNekoModules.find(
+                        x => x.name === prop.target.value
                       );
-                    }
-                  }}
-                >
-                  {this.state.nekoRoutes.map(x => (
-                    <MenuItem
-                      key={x.name}
-                      disabled={this.state.currentNekoRoute.name === x.name}
-                      value={x.name}
-                    >
-                      {x.displayName}
-                    </MenuItem>
-                  ))}
-                </Select>
+                      if (r) {
+                        this.currentRoute.next(r);
+                        this.setState(
+                          {
+                            nekoLoading: true
+                          },
+                          () => {
+                            this.currentRoute.next(r);
+                          }
+                        );
+                      }
+                    }}
+                  >
+                    {loadedNekoModules
+                      .filter(x => (x.isNsfw ? nsfwEnabled : true))
+                      .map(x => (
+                        <MenuItem
+                          key={x.name}
+                          disabled={currentNekoRoute.name === x.name}
+                          value={x.name}
+                        >
+                          {x.displayName}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                )}
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+        <AppBar position="static" color="primary" className="sub-bar" elevation={4}>
+          <Container maxWidth="md">
+            <Toolbar style={{minHeight: 40}}>
+              <Box
+                display="flex"
+                flex="1"
+                flexDirection="row"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Box flex="1" />
+                {currentNeko &&
+                  loadedNekoModules.filter(x => x.isNsfw).length > 0 && (
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          title="NSFW"
+                          color="primary"
+                          checked={nsfwEnabled}
+                          onChange={async () =>
+                            this.setState({
+                              nsfwEnabled: !nsfwEnabled
+                            }, () => {
+                              localStorage.setItem('nsfwEnabled', JSON.stringify(!nsfwEnabled));
+                            })
+
+                          }
+                        />
+                      }
+                      label="NSFW"
+                      labelPlacement="end"
+                    />
+                  )}
               </Box>
             </Toolbar>
           </Container>
@@ -189,9 +264,9 @@ export default class NekoPage extends React.Component<
             <small>nekos.life &copy; GPLv3 rights reserved upon API</small>
             <IconButton href="https://github.com/Nekos-life" target="_blank">
               <svg
-              style={{verticalAlign: 'middle'}}
-              height="16px"
-              width="16px"
+                style={{ verticalAlign: 'middle' }}
+                height="16px"
+                width="16px"
                 viewBox="0 0 256 250"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"

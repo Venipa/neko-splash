@@ -1,0 +1,8 @@
+{
+    "displayName": "Neko",
+    "name": "neko-nsfw",
+    "description": null,
+    "isNsfw": true,
+    "apiBase": null,
+    "path": "img/nsfw_neko_gif"
+}
