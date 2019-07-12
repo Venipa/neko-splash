@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "020240446a8bc415b84d31552e92f242",
+    "revision": "3fb71966ce5f1b081fffb20b02731582",
     "url": "/neko-splash/index.html"
   },
   {
