@@ -10,3 +10,11 @@ export interface INekoRoute {
     isNsfw?: boolean;
     request: () => Observable<RxHttpRequestResponse<INekoImage>>;
 }
+export interface NekoImageMd {
+    displayName: string;
+    name: string;
+    description: string;
+    isNsfw: boolean;
+    apiBase?: string;
+    path?: string;
+}
