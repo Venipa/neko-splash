@@ -1,4 +1,9 @@
 .sub-bar {
-    background: rgba(#000, .875)!important;
-    margin-bottom: 16px;
+  & > .sub-bar-bg {
+      &-dark {
+        background: #fafafa;
+      }
+      background: rgba(#fff, 0.125);
+  }
+  margin-bottom: 16px;
 }

@@ -3,6 +3,10 @@ body,
 #root,
 #root > .MuiBox-root {
     height: 100%;
+    &.dark {
+      background-color: #212121;
+      color: #fff;
+    }
 }
 .App {
   text-align: center;

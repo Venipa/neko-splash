@@ -2,7 +2,7 @@
   "name": "neko-web-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://venipa.github.io/neko-splash",
+  "homepage": "https://neko-splash.venipa.net",
   "dependencies": {
     "@akanass/rx-http-request": "^3.2.0",
     "@babel/core": "7.4.3",
